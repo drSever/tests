@@ -13,7 +13,7 @@ from typing import List, Optional
 import json
 import time
 
-from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks
+from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -66,7 +66,7 @@ class AnalysisRequest(BaseModel):
 analysis_results = {}
 
 @app.get("/", response_class=HTMLResponse)
-async def root(request):
+async def root(request: Request):
     """Главная страница"""
     return templates.TemplateResponse("index.html", {"request": request})
 
