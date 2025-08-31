@@ -13,7 +13,7 @@ from typing import List, Optional
 import json
 import time
 
-from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks, Request
+from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks, Request, Form
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -101,11 +101,11 @@ async def upload_image(file: UploadFile = File(...)):
 @app.post("/analyze", response_class=JSONResponse)
 async def analyze_image(
     background_tasks: BackgroundTasks,
-    file_id: str,
-    analyze_teeth: bool = True,
-    analyze_cysts: bool = True,
-    replace_cyst_volume: bool = False,
-    replacement_method: str = "interpolation"
+    file_id: str = Form(...),
+    analyze_teeth: bool = Form(True),
+    analyze_cysts: bool = Form(True),
+    replace_cyst_volume: bool = Form(False),
+    replacement_method: str = Form("interpolation")
 ):
     """Запуск анализа изображения"""
     try:
