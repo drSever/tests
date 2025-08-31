@@ -104,7 +104,7 @@ async def analyze_image(
     file_id: str = Form(...),
     analyze_teeth: bool = Form(True),
     analyze_cysts: bool = Form(True),
-    replace_cyst_volume: bool = Form(False),
+    should_replace_cyst_volume: bool = Form(False),
     replacement_method: str = Form("interpolation")
 ):
     """Запуск анализа изображения"""
@@ -132,7 +132,7 @@ async def analyze_image(
             image_path,
             analyze_teeth,
             analyze_cysts,
-            replace_cyst_volume,
+            should_replace_cyst_volume,
             replacement_method
         )
         
@@ -170,7 +170,7 @@ async def perform_analysis(
     image_path: str,
     analyze_teeth: bool,
     analyze_cysts: bool,
-    replace_cyst_volume: bool,
+    should_replace_cyst_volume: bool,
     replacement_method: str
 ):
     """Выполнение анализа в фоновом режиме"""
@@ -247,7 +247,7 @@ async def perform_analysis(
                     results["cyst_analysis"] = cyst_analysis
                     
                     # Замена объёма кисты если требуется
-                    if replace_cyst_volume and "error" not in cyst_analysis:
+                    if should_replace_cyst_volume and "error" not in cyst_analysis:
                         analysis_results[task_id]["message"] = "Замена объёма кисты..."
                         replaced_path = cyst_output_dir / f"cyst_replaced_{replacement_method}.png"
                         replace_cyst_volume(

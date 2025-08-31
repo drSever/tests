@@ -358,7 +358,7 @@ class DentalAnalysisApp {
             const caption = this.getVisualizationCaption(filename);
             
             item.innerHTML = `
-                <img src="/static/results/${this.currentTaskId}/${filename}" alt="${caption}">
+                <img src="/static/results/${this.currentTaskId}/${filename}" alt="${caption}" onclick="openImageModal('/static/results/${this.currentTaskId}/${filename}', '${caption}')" style="cursor: pointer;">
                 <div class="caption">${caption}</div>
             `;
             
@@ -453,5 +453,53 @@ document.addEventListener('DOMContentLoaded', () => {
 function resetAnalysis() {
     if (window.dentalApp) {
         window.dentalApp.resetAnalysis();
+    }
+}
+
+// Global function for opening image modal
+function openImageModal(imageSrc, caption) {
+    // Create modal if it doesn't exist
+    let modal = document.getElementById('imageModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'imageModal';
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content image-modal">
+                <div class="modal-header">
+                    <h3 id="modalCaption"></h3>
+                    <button class="close-btn" onclick="closeImageModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="">
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeImageModal();
+            }
+        });
+    }
+    
+    // Set content
+    document.getElementById('modalImage').src = imageSrc;
+    document.getElementById('modalCaption').textContent = caption;
+    
+    // Show modal
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
     }
 }

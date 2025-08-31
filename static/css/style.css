@@ -493,6 +493,12 @@ body {
     width: 100%;
     height: 200px;
     object-fit: cover;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.visualization-item img:hover {
+    transform: scale(1.05);
+    opacity: 0.8;
 }
 
 .visualization-item .caption {
@@ -623,4 +629,81 @@ body {
 
 .hidden {
     display: none !important;
+}
+
+/* Image Modal */
+.image-modal {
+    max-width: 90vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    padding: 0;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.modal-body {
+    padding: 0;
+    max-height: 70vh;
+    overflow: auto;
+}
+
+.modal-body img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Responsive adjustments for image modal */
+@media (max-width: 768px) {
+    .image-modal {
+        max-width: 95vw;
+        max-height: 95vh;
+    }
+    
+    .modal-header {
+        padding: 1rem;
+    }
+    
+    .modal-header h3 {
+        font-size: 1rem;
+    }
+    
+    .close-btn {
+        width: 35px;
+        height: 35px;
+    }
 }
