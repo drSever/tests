@@ -68,3 +68,12 @@ image_test_*/
 # Temporary files
 *.tmp
 *.temp
+
+# Web application files
+uploads/
+results/
+static/results/
+
+# FastAPI
+__pycache__/
+*.pyc

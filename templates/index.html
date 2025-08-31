@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dental Analysis - Анализ стоматологических изображений</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', path='/css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tooth"></i>
+                    <h1>Dental Analysis</h1>
+                </div>
+                <p class="subtitle">Анализ стоматологических изображений с ИИ</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section" id="uploadSection">
+                <div class="upload-card">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3>Загрузите изображение</h3>
+                        <p>Перетащите файл сюда или нажмите для выбора</p>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                        <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                            <i class="fas fa-folder-open"></i>
+                            Выбрать файл
+                        </button>
+                    </div>
+                    
+                    <div class="file-info" id="fileInfo" style="display: none;">
+                        <div class="file-preview">
+                            <img id="imagePreview" src="" alt="Preview">
+                        </div>
+                        <div class="file-details">
+                            <h4 id="fileName"></h4>
+                            <p id="fileSize"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analysis Options -->
+            <section class="options-section" id="optionsSection" style="display: none;">
+                <div class="options-card">
+                    <h3><i class="fas fa-cogs"></i> Настройки анализа</h3>
+                    <div class="options-grid">
+                        <div class="option-item">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="analyzeTeeth" checked>
+                                <span class="checkmark"></span>
+                                <i class="fas fa-tooth"></i>
+                                Анализ зубов
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="analyzeCysts" checked>
+                                <span class="checkmark"></span>
+                                <i class="fas fa-circle"></i>
+                                Анализ кист
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="replaceCystVolume">
+                                <span class="checkmark"></span>
+                                <i class="fas fa-magic"></i>
+                                Замена объёма кисты
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="replacement-method" id="replacementMethod" style="display: none;">
+                        <label for="methodSelect">Метод замены:</label>
+                        <select id="methodSelect" class="select-input">
+                            <option value="interpolation">Интерполяция</option>
+                            <option value="blur">Размытие</option>
+                            <option value="color_fill">Заполнение цветом</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn btn-success btn-large" id="startAnalysis">
+                        <i class="fas fa-play"></i>
+                        Начать анализ
+                    </button>
+                </div>
+            </section>
+
+            <!-- Progress Section -->
+            <section class="progress-section" id="progressSection" style="display: none;">
+                <div class="progress-card">
+                    <div class="progress-header">
+                        <h3><i class="fas fa-spinner fa-spin"></i> Анализ в процессе</h3>
+                        <div class="progress-status" id="progressStatus">Инициализация...</div>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    
+                    <div class="progress-steps">
+                        <div class="step" id="step1">
+                            <i class="fas fa-upload"></i>
+                            <span>Загрузка</span>
+                        </div>
+                        <div class="step" id="step2">
+                            <i class="fas fa-tooth"></i>
+                            <span>Анализ зубов</span>
+                        </div>
+                        <div class="step" id="step3">
+                            <i class="fas fa-circle"></i>
+                            <span>Анализ кист</span>
+                        </div>
+                        <div class="step" id="step4">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Обработка</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <h3><i class="fas fa-chart-bar"></i> Результаты анализа</h3>
+                    <button class="btn btn-outline" onclick="resetAnalysis()">
+                        <i class="fas fa-redo"></i>
+                        Новый анализ
+                    </button>
+                </div>
+                
+                <div class="results-grid">
+                    <!-- Teeth Analysis -->
+                    <div class="result-card" id="teethCard">
+                        <div class="card-header">
+                            <i class="fas fa-tooth"></i>
+                            <h4>Анализ зубов</h4>
+                        </div>
+                        <div class="card-content" id="teethContent">
+                            <!-- Content will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Cyst Analysis -->
+                    <div class="result-card" id="cystCard">
+                        <div class="card-header">
+                            <i class="fas fa-circle"></i>
+                            <h4>Анализ кист</h4>
+                        </div>
+                        <div class="card-content" id="cystContent">
+                            <!-- Content will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Root Overlap Analysis -->
+                    <div class="result-card" id="rootCard">
+                        <div class="card-header">
+                            <i class="fas fa-chart-line"></i>
+                            <h4>Поражение корней</h4>
+                        </div>
+                        <div class="card-content" id="rootContent">
+                            <!-- Content will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Visualizations -->
+                <div class="visualizations-section" id="visualizationsSection">
+                    <h4><i class="fas fa-images"></i> Визуализации</h4>
+                    <div class="visualizations-grid" id="visualizationsGrid">
+                        <!-- Images will be populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Dental Analysis. Powered by AI & FastAPI</p>
+        </footer>
+    </div>
+
+    <!-- Loading Modal -->
+    <div class="modal" id="loadingModal">
+        <div class="modal-content">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+            </div>
+            <h3>Обработка...</h3>
+            <p id="modalMessage">Пожалуйста, подождите</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', path='/js/app.js') }}"></script>
+</body>
+</html>
